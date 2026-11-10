@@ -8,10 +8,10 @@
 ## 目录
 
 - [C3 群内高质量参与](./C3/)
-- [C5 GitHub Repository](./C5/)（仓库：elite20-aar-writer）
+- [C5 GitHub Repository](https://github.com/ZhouYan05/elite20-aar-writer)（独立仓库）
 - [C5A GitHub 入门与仓库理解](./C5A/)
-- [C6 Web Application](./C6/)（在线：ZhouYan05.github.io/elite20-aar-writer）
-- [C6A 提交数据仪表盘](./C6A/)（在线：ZhouYan05.github.io/elite20-submission-dashboard）
+- [C6 Web Application](https://ZhouYan05.github.io/elite20-aar-writer/)（在线 App）
+- [C6A 提交数据仪表盘](https://ZhouYan05.github.io/elite20-submission-dashboard/)（在线仪表盘）
 - [C7 内容传播](./C7/)
 - [C8 Real-World Project](./C8/)
 - [C9 Self-Initiated Project](./C9/)
