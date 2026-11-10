@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>食堂智推 · MVP — 校园美食推荐与评价分析</title>
+<style>
+  :root { --brand:#e8590c; --bg:#fff8f2; --card:#fff; --ink:#333; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:linear-gradient(135deg,#ff7a1a,#e8590c); color:#fff; padding:20px 16px; text-align:center; }
+  header h1 { font-size:22px; } header p { font-size:13px; opacity:.9; margin-top:4px; }
+  main { max-width:640px; margin:0 auto; padding:16px; }
+  .card { background:var(--card); border-radius:12px; padding:16px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+  .card h2 { font-size:16px; margin-bottom:10px; color:var(--brand); }
+  label { font-size:13px; display:block; margin:8px 0 4px; }
+  select, input[type=number] { width:100%; padding:8px; border:1px solid #e3d5c8; border-radius:8px; font-size:14px; }
+  button { width:100%; margin-top:14px; padding:11px; background:var(--brand); color:#fff; border:none; border-radius:10px; font-size:15px; cursor:pointer; }
+  button:hover { background:#d94f0a; }
+  .dish { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px dashed #eee; }
+  .dish:last-child { border-bottom:none; }
+  .dish .name { font-size:15px; font-weight:600; }
+  .dish .meta { font-size:12px; color:#888; }
+  .stars { color:#f59f00; font-size:13px; }
+  .tag { display:inline-block; font-size:11px; background:#fff0e4; color:var(--brand); border-radius:6px; padding:1px 6px; margin-left:6px; }
+  .bar { height:8px; background:#f0e5da; border-radius:4px; margin:3px 0 8px; overflow:hidden; }
+  .bar i { display:block; height:100%; background:linear-gradient(90deg,#ffb366,#e8590c); }
+  .stat { display:flex; justify-content:space-around; text-align:center; margin:6px 0; }
+  .stat b { font-size:20px; color:var(--brand); display:block; }
+  .stat span { font-size:12px; color:#888; }
+  footer { text-align:center; font-size:12px; color:#aaa; padding:12px 0 24px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🍜 食堂智推（MVP）</h1>
+  <p>输入你的口味与预算，得到今日推荐 + 全食堂评价分析</p>
+</header>
+<main>
+  <div class="card">
+    <h2>今天想吃什么？</h2>
+    <label>口味偏好</label>
+    <select id="taste">
+      <option value="辣">🌶️ 辣</option>
+      <option value="清淡">🥬 清淡</option>
+      <option value="甜">🍯 甜</option>
+      <option value="都可以">😋 都可以</option>
+    </select>
+    <label>预算（元）</label>
+    <input type="number" id="budget" value="15" min="5" max="50">
+    <label>场景</label>
+    <select id="scene">
+      <option value="赶时间">⏱️ 赶时间（出餐快）</option>
+      <option value="聚餐">👥 聚餐（分量大）</option>
+      <option value="随便">🚶 随便吃点</option>
+    </select>
+    <button onclick="recommend()">给我推荐</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>🎯 今日推荐</h2>
+    <div id="dishList"></div>
+    <p style="font-size:12px;color:#888;margin-top:8px">推荐逻辑：口味匹配 × 好评率 × 预算筛选，优先出餐快/分量大（按场景）。</p>
+  </div>
+
+  <div class="card">
+    <h2>📊 全食堂评价分析（示例数据）</h2>
+    <div class="stat">
+      <div><b>1284</b><span>累计评价</span></div>
+      <div><b>4.2</b><span>平均评分</span></div>
+      <div><b>87%</b><span>好评率</span></div>
+    </div>
+    <p style="font-size:13px;margin-top:8px">热门口味分布</p>
+    <div>辣 <div class="bar"><i style="width:42%"></i></div></div>
+    <div>清淡 <div class="bar"><i style="width:33%"></i></div></div>
+    <div>甜 <div class="bar"><i style="width:18%"></i></div></div>
+    <div>其他 <div class="bar"><i style="width:7%"></i></div></div>
+  </div>
+</main>
+<footer>食堂智推 MVP · 周岩（C9 自驱项目第一周产出）· 数据为演示样例，真实数据来自团队项目「食堂智推」</footer>
+
+<script>
+const DISHES = [
+  {name:"麻辣香锅", taste:"辣", price:14, rating:4.6, reviews:203, speed:2, size:3, tags:["招牌"]},
+  {name:"黄焖鸡米饭", taste:"辣", price:13, rating:4.4, reviews:187, speed:3, size:2, tags:["出餐快"]},
+  {name:"番茄鸡蛋面", taste:"清淡", price:9, rating:4.3, reviews:156, speed:3, size:1, tags:["实惠"]},
+  {name:"清炒时蔬套餐", taste:"清淡", price:10, rating:4.0, reviews:98, speed:3, size:1, tags:[]},
+  {name:"糖醋里脊盖饭", taste:"甜", price:12, rating:4.2, reviews:121, speed:2, size:2, tags:[]},
+  {name:"红豆粥+包子", taste:"甜", price:7, rating:4.1, reviews:74, speed:3, size:1, tags:["早餐"]},
+  {name:"鸡排饭", taste:"都可以", price:12, rating:4.3, reviews:165, speed:2, size:2, tags:[]},
+  {name:"牛肉拉面", taste:"都可以", price:15, rating:4.5, reviews:210, speed:3, size:2, tags:["招牌"]},
+];
+function recommend(){
+  const taste = document.getElementById("taste").value;
+  const budget = +document.getElementById("budget").value || 15;
+  const scene = document.getElementById("scene").value;
+  let pool = DISHES.filter(d => d.price <= budget)
+    .filter(d => taste === "都可以" || d.taste === taste);
+  if (pool.length === 0) pool = DISHES.filter(d => d.price <= budget);
+  pool.sort((a,b) => {
+    const sa = (scene==="赶时间"?a.speed:0)+(scene==="聚餐"?a.size:0);
+    const sb = (scene==="赶时间"?b.speed:0)+(scene==="聚餐"?b.size:0);
+    return (sb + b.rating*0.3) - (sa + a.rating*0.3);
+  });
+  const top = pool.slice(0,3);
+  document.getElementById("dishList").innerHTML = top.map(d =>
+    `<div class="dish"><div><div class="name">${d.name} ${d.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+     <div class="meta">${d.price} 元 · ${d.reviews} 条评价 · ${d.taste}</div></div>
+     <div class="stars">★ ${d.rating}</div></div>`).join("");
+  document.getElementById("result").hidden = false;
+  document.getElementById("result").scrollIntoView({behavior:"smooth"});
+}
+</script>
+</body>
+</html>

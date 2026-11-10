@@ -1,0 +1,15 @@
+C5A Level 1 交付：GitHub 账号与个人仓库
+
+GitHub 账号（用户名）：ZhouYan05
+账号主页：https://github.com/ZhouYan05
+
+个人仓库：elite20-portfolio
+仓库链接：https://github.com/ZhouYan05/elite20-portfolio
+README 内容：姓名 周岩；专业 人工智能学院（计算机方向）；学号 2024102310451；
+一句话介绍：EduSeed AI+X Elite20 课程学员，用 AI 协作完成课程挑战，把过程沉淀为公开作品集。
+
+其余仓库（课程作品，均公开）：
+- https://github.com/ZhouYan05/elite20-aar-writer          （C5/C6 AAR 生成器 Web App）
+- https://github.com/ZhouYan05/elite20-submission-dashboard （C6A 提交数据仪表盘）
+- https://github.com/ZhouYan05/neoskills                   （C5A fork，含中文文档贡献）
+- https://github.com/ZhouYan05/C1_deliverable              （C1 课程资料翻译）
